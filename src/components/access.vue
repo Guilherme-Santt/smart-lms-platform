@@ -7,33 +7,33 @@
         </div>
 
         <div class="input-group" v-if="isRegister">
-        <label for="name">Nome completo</label>
-        <input
-            id="name"
-            type="text"
-            placeholder="Seu nome"
-            v-model="name"
-        />
+          <label for="name">Nome completo</label>
+          <input
+              id="name"
+              type="text"
+              placeholder="Seu nome"
+              v-model="name"
+          />
+          </div>
+
+          <div class="input-group">
+          <label for="email">Email</label>
+          <input
+              id="email"
+              type="email"
+              placeholder="seu@email.com"
+              v-model="email"
+          />
         </div>
 
         <div class="input-group">
-        <label for="email">Email</label>
-        <input
-            id="email"
-            type="email"
-            placeholder="seu@email.com"
-            v-model="email"
-        />
-        </div>
-
-        <div class="input-group">
-        <label for="password">Senha</label>
-        <input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            v-model="password"
-        />
+          <label for="password">Senha</label>
+          <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              v-model="password"
+          />
         </div>
 
         <div class="input-group" v-if="isRegister">
@@ -50,7 +50,7 @@
         <a href="#" @click.prevent="$emit('forgot-password')">Esqueceu a senha?</a>
         </div>
 
-        <button class="btn" @click="handleSubmit" :disabled="loading">
+        <button class="btn" @click="handleSubmit">
         {{ loading ? (isRegister ? 'Cadastrando...' : 'Entrando...') : (isRegister ? 'Cadastrar' : 'Entrar') }}
         </button>
 
@@ -106,35 +106,31 @@
     const loading = ref(false)
     
     const handleSubmit = () => {
-        if (props.isRegister) {
-            if (!name.value || !email.value || !password.value || !confirmPassword.value) {
-                alert('Por favor, preencha todos os campos')
-                return
-            }
+      if (props.isRegister) {
+          if (!name.value || !email.value || !password.value || !confirmPassword.value) {
+              alert('Por favor, preencha todos os campos')
+              return
+          }
 
-            if (password.value !== confirmPassword.value) {
-                alert('As senhas não coincidem')
-                return
-            }
-            loading.value = true
-            emit('register', { 
-                name: name.value, 
-                email: email.value, 
-                password: password.value 
-            })
-        } else {
-            if (!email.value || !password.value) {
-                alert('Por favor, preencha todos os campos')
-                return
-            }
-            
-            loading.value = true
+          if (password.value !== confirmPassword.value) {
+              alert('As senhas não coincidem')
+              return
+          }
+          loading.value = true
+          emit('register', { 
+              name: name.value, 
+              email: email.value, 
+              password: password.value,
+              confirmPassword: confirmPassword.value
+          })
+      } else {
+          loading.value = true
 
-            emit('login', { 
-                email: email.value, 
-                password: password.value 
-            })
-        }
+          emit('login', { 
+              email: email.value, 
+              password: password.value,
+          })
+      }
     }
 </script>
   <style scoped>

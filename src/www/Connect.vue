@@ -8,6 +8,8 @@
     <Access 
       :title="isRegisterMode ? 'Cadastro' : 'Login'" 
       :isRegister="isRegisterMode"
+      :loading="loading"
+      :error="messageError"
       @login="handleLogin"
       @register="handleRegister"
       @toggle-mode="toggleMode"
@@ -18,43 +20,49 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
   import Access from '../components/access.vue'
+  import { useAuth } from '../composables/useAuth.js';
+  import { useToast } from '../composables/useAlert.js';
+  import { ref } from 'vue';
 
-  const router = useRouter()
+  const { login, register, loading, error } = useAuth();
+  const toast = useToast()
+
   const isRegisterMode = ref(false)
+  const messageError = ref('')
 
   const toggleMode = () => {
     isRegisterMode.value = !isRegisterMode.value
   }
 
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     if (!data.email || !data.password) {
-      alert('Por favor, preencha todos os campos')
+      toast('Preencha todos os campos!', 'warning')
       return
     }
 
-    console.log('Fazendo login com:', data)
-    
-    setTimeout(() => {
-      alert('Login realizado com sucesso!')
-      router.push('/welcome')
-    }, 1000)
+    try {
+        await login({ email: data.email, password: data.password });
+        loading.value = false;
+    } catch (err) {
+        messageError.value = error || 'Erro ao fazer login'
+        toast('Erro ao fazer login', 'error')
+    }
   }
 
-  const handleRegister = (data) => {
+  const handleRegister = async (data) => {
     if (!data.name || !data.email || !data.password) {
       alert('Por favor, preencha todos os campos')
       return
     }
 
-    console.log('Cadastrando usuário:', data)
-    
-    setTimeout(() => {
-      alert('Cadastro realizado com sucesso!')
-      router.push('/welcome')
-    }, 1000)
+    try {
+      await register({ name: data.name, email: data.email, password: data.password, confirm: data.confirmPassword });
+      loading.value = false;
+    } catch(err) {
+      messageError.value = error || 'Erro ao fazer cadastro'
+      alert('Erro ao fazer cadastro: ' + err.message)
+    }
   }
 
   const handleSocialLogin = (provider) => {
