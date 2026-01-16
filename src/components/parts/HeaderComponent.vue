@@ -36,7 +36,7 @@
         <router-link to="/LearningCourses" class="nav-item" @click="closeMenu">Meus aprendizados</router-link>
         <router-link to="/CoursesManagement" class="nav-item" @click="closeMenu">Meus Cursos</router-link>
         <router-link to="/relatorios" class="nav-item" @click="closeMenu">Relatórios</router-link>
-        <router-link to="/configuracoes" class="nav-item" @click="closeMenu">Configurações</router-link>
+        <router-link to="/settings" class="nav-item" @click="closeMenu">Configurações</router-link>
         
         <button class="btn-primary mobile-only" @click.prevent="logout">Sair</button>
       </div>

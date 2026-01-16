@@ -1,6 +1,8 @@
 <script setup>
   import { ref } from 'vue';
+  import ManagementModal from '../components/modals/ManagementModal.vue';
   
+  const isOpen = ref(false)
   const courses = ref([
     { 
       id: 1, 
@@ -19,60 +21,66 @@
       lastUpdate: '05/01/2026'
     }
   ]);
-  </script>
-  
-  <template>
-    <div class="container">
-      <header class="header">
-        <div class="title-area">
-          <h1>Gerenciar Cursos</h1>
-          <p>Acompanhe e organize a estrutura dos seus treinamentos.</p>
+</script>
+
+<template>
+  <div class="container">
+    <header class="header">
+      <div class="title-area">
+        <h1>Gerenciar Cursos</h1>
+        <p>Acompanhe e organize a estrutura dos seus treinamentos.</p>
+      </div>
+      <button @click="isOpen = true" class="btn-new">
+        <span>+</span> Novo Curso
+      </button>
+    </header>
+
+    <div class="grid">
+      <div v-for="course in courses" :key="course.id" class="card">
+        <div class="card-top">
+          <span class="badge">{{ course.category }}</span>
+          <span class="update-date">Atualizado em {{ course.lastUpdate }}</span>
         </div>
-        <button class="btn-new">
-          <span>+</span> Novo Curso
-        </button>
-      </header>
-  
-      <div class="grid">
-        <div v-for="course in courses" :key="course.id" class="card">
-          <div class="card-top">
-            <span class="badge">{{ course.category }}</span>
-            <span class="update-date">Atualizado em {{ course.lastUpdate }}</span>
-          </div>
+        
+        <div class="card-body">
+          <h3>{{ course.title }}</h3>
           
-          <div class="card-body">
-            <h3>{{ course.title }}</h3>
-            
-            <div class="stats-row">
-              <div class="stat-item">
-                <span class="stat-icon">📁</span>
-                <div class="stat-info">
-                  <strong>{{ course.moduleCount }}</strong>
-                  <span>Módulos</span>
-                </div>
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-icon">📁</span>
+              <div class="stat-info">
+                <strong>{{ course.moduleCount }}</strong>
+                <span>Módulos</span>
               </div>
-              <div class="stat-item">
-                <span class="stat-icon">🎬</span>
-                <div class="stat-info">
-                  <strong>{{ course.lessonCount }}</strong>
-                  <span>Aulas</span>
-                </div>
+            </div>
+            <div class="stat-item">
+              <span class="stat-icon">🎬</span>
+              <div class="stat-info">
+                <strong>{{ course.lessonCount }}</strong>
+                <span>Aulas</span>
               </div>
             </div>
           </div>
-  
-          <div class="card-footer">
-            <router-link :to="`/editCourse/${course.id}`" class="btn-manage">
-              Gerenciar Conteúdo
-            </router-link>
-          </div>
+        </div>
+
+        <div class="card-footer">
+          <router-link :to="`/editCourse/${course.id}`" class="btn-manage">
+            Gerenciar Conteúdo
+          </router-link>
         </div>
       </div>
     </div>
-  </template>
-  
-  <style scoped>
-  .container { padding: 3rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    <management-modal
+      :isOpen="isOpen"
+      @close="isOpen = false"
+      @save="handleSaveCourse"
+    />
+  </div>
+</template>
+
+<style scoped>
+  .container { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
   
   .header { 
     display: flex; 
@@ -170,4 +178,4 @@
   }
   
   .btn-new:hover { transform: scale(1.02); background: #0f172a; }
-  </style>
+</style>

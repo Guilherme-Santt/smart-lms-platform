@@ -1,21 +1,112 @@
 <script setup>
   import { ref, onMounted, computed } from 'vue';
+  import WelcomeModal from '../components/modals/WelcomeModal.vue';
   
   const coursesData = [
-    { "id": 1, "title": "Masterizando Vue 3 Avançado", "author": "Ana Silva", "category": "Tecnologia", "rating": 4.9, "reviews": 1240, "price": 199.90, "image": "https://picsum.photos/seed/course1/400/225", "lessons_count": 84 },
-    { "id": 2, "title": "UI/UX para Startups", "author": "Bruno Costa", "category": "Design", "rating": 4.8, "reviews": 850, "price": 159.00, "image": "https://picsum.photos/seed/course2/400/225", "lessons_count": 45 },
-    { "id": 3, "title": "Python para Data Science", "author": "Carla Souza", "category": "Tecnologia", "rating": 4.7, "reviews": 2100, "price": 249.90, "image": "https://picsum.photos/seed/course3/400/225", "lessons_count": 120 },
-    { "id": 4, "title": "Marketing Digital 2026", "author": "Diego Lima", "category": "Negócios", "rating": 4.6, "reviews": 560, "price": 89.90, "image": "https://picsum.photos/seed/course4/400/225", "lessons_count": 30 },
-    { "id": 5, "title": "Excel do Zero ao Dashboard", "author": "Elena Rocha", "category": "Negócios", "rating": 4.9, "reviews": 3200, "price": 49.90, "image": "https://picsum.photos/seed/course5/400/225", "lessons_count": 25 },
-    { "id": 6, "title": "Node.js com NestJS", "author": "Ana Silva", "category": "Tecnologia", "rating": 4.8, "reviews": 920, "price": 210.00, "image": "https://picsum.photos/seed/course6/400/225", "lessons_count": 70 }
-  ];
-  
+    {
+      "id": 1,
+      "title": "Masterizando Vue 3 Avançado",
+      "author": "Ana Silva",
+      "category": "Tecnologia",
+      "rating": 4.9,
+      "reviews": 1240,
+      "price": 199.90,
+      "image": "https://picsum.photos/seed/course1/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "modules": 3,
+      "aulas": 30
+    },
+    {
+      "id": 2,
+      "title": "UI/UX para Startups",
+      "author": "Bruno Costa",
+      "category": "Design",
+      "rating": 4.8,
+      "reviews": 850,
+      "price": 159.00,
+      "image": "https://picsum.photos/seed/course2/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/3hL-X9mUuM4",
+      "modules": 3,
+      "aulas": 30
+    },
+    {
+      "id": 3,
+      "title": "Python para Data Science",
+      "author": "Carla Souza",
+      "category": "Tecnologia",
+      "rating": 4.7,
+      "reviews": 2100,
+      "price": 249.90,
+      "image": "https://picsum.photos/seed/course3/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/rfscVS0vtbw",
+      "modules": 3,
+      "aulas": 30
+    },
+    {
+      "id": 4,
+      "title": "Marketing Digital 2026",
+      "author": "Diego Lima",
+      "category": "Negócios",
+      "rating": 4.6,
+      "reviews": 560,
+      "price": 89.90,
+      "image": "https://picsum.photos/seed/course4/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/w7ejDZ8SWv8",
+      "modules": 3,
+      "aulas": 30
+    },
+    {
+      "id": 5,
+      "title": "Excel do Zero ao Dashboard",
+      "author": "Elena Rocha",
+      "category": "Negócios",
+      "rating": 4.9,
+      "reviews": 3200,
+      "price": 49.90,
+      "image": "https://picsum.photos/seed/course5/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/mU6anWqZJ2U",
+      "modules": 3,
+      "aulas": 30
+    },
+    {
+      "id": 6,
+      "title": "Node.js com NestJS",
+      "author": "Ana Silva",
+      "category": "Tecnologia",
+      "rating": 4.8,
+      "reviews": 920,
+      "price": 210.00,
+      "image": "https://picsum.photos/seed/course6/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/0M8AYU_hPas",
+      "modules": 3,
+      "aulas": 30
+    },
+    {
+      "id": 7,
+      "title": "Fotografia com Smartphone",
+      "author": "Gabriel Mello",
+      "category": "Artes",
+      "rating": 4.5,
+      "reviews": 310,
+      "price": 120.00,
+      "image": "https://picsum.photos/seed/course7/400/225",
+      "introVideoUrl": "https://www.youtube.com/embed/T8_S77_rK0I",
+      "modules": 3,
+      "aulas": 30
+    },
+  ]
+
   const courses = ref([]);
   const loading = ref(true);
   const searchQuery = ref('');
   const activeCategory = ref('Todos');
   const categories = ['Todos', 'Tecnologia', 'Design', 'Negócios'];
-  
+  const selectedCourse = ref(null);
+
+  const openCourse = (course) => {
+    selectedCourse.value = course;
+  };
+
   onMounted(() => {
     setTimeout(() => {
       courses.value = coursesData;
@@ -23,7 +114,6 @@
     }, 500);
   });
   
-  // Lógica de filtro reativo
   const filteredCourses = computed(() => {
     return courses.value.filter(course => {
       const matchesSearch = course.title.toLowerCase().includes(searchQuery.ref?.value?.toLowerCase() || searchQuery.value.toLowerCase());
@@ -35,71 +125,78 @@
   const formatPrice = (value) => {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
-  </script>
+</script>
   
-  <template>
-    <div class="home-container">
-      <section class="hero">
-        <div class="hero-content">
-          <h1>O que você quer aprender hoje?</h1>
-          <div class="search-bar">
-            <input 
-              v-model="searchQuery" 
-              type="text" 
-              placeholder="Busque por cursos ou autores..." 
-            />
-            <button class="search-btn">🔍</button>
-          </div>
+<template>
+  <div class="home-container">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>O que você quer aprender hoje?</h1>
+        <div class="search-bar">
+          <input 
+            v-model="searchQuery" 
+            type="text" 
+            placeholder="Busque por cursos ou autores..." 
+          />
+          <button class="search-btn">🔍</button>
         </div>
-      </section>
-  
-      <nav class="categories-nav">
-        <button 
-          v-for="cat in categories" 
-          :key="cat"
-          :class="{ active: activeCategory === cat }"
-          @click="activeCategory = cat"
-        >
-          {{ cat }}
-        </button>
-      </nav>
-  
-      <div v-if="loading" class="loader-container">
-         <div class="spinner"></div>
-         <p>Carregando cursos incríveis...</p>
       </div>
-  
-      <main v-else class="courses-grid">
-        <div v-if="filteredCourses.length === 0" class="no-results">
-          <p>Nenhum curso encontrado para "{{ searchQuery }}".</p>
-        </div>
-  
-        <div v-for="course in filteredCourses" :key="course.id" class="course-card">
-          <div class="card-image">
-            <img :src="course.image" :alt="course.title">
-            <span class="category-tag">{{ course.category }}</span>
-          </div>
-          
-          <div class="card-info">
-            <h3>{{ course.title }}</h3>
-            <p class="author">Instrutor: {{ course.author }}</p>
-            
-            <div class="stats">
-              <span class="rating">⭐ {{ course.rating }}</span>
-              <span class="lessons">{{ course.lessons_count }} aulas</span>
-            </div>
-  
-            <div class="card-footer">
-              <div class="price">{{ formatPrice(course.price) }}</div>
-              <button class="btn-enroll">Ver Curso</button>
-            </div>
-          </div>
-        </div>
-      </main>
+    </section>
+
+    <nav class="categories-nav">
+      <button 
+        v-for="cat in categories" 
+        :key="cat"
+        :class="{ active: activeCategory === cat }"
+        @click="activeCategory = cat"
+      >
+        {{ cat }}
+      </button>
+    </nav>
+
+    <div v-if="loading" class="loader-container">
+        <div class="spinner"></div>
+        <p>Carregando cursos incríveis...</p>
     </div>
-  </template>
+
+    <main v-else class="courses-grid">
+      <div v-if="filteredCourses.length === 0" class="no-results">
+        <p>Nenhum curso encontrado para "{{ searchQuery }}".</p>
+      </div>
+
+      <div v-for="course in filteredCourses" :key="course.id" class="course-card">
+        <div class="card-image">
+          <img :src="course.image" :alt="course.title">
+          <span class="category-tag">{{ course.category }}</span>
+        </div>
+        
+        <div class="card-info">
+          <h3>{{ course.title }}</h3>
+          <p class="author">Instrutor: {{ course.author }}</p>
+          
+          <div class="stats">
+            <span class="rating">⭐ {{ course.rating }}</span>
+            <span class="lessons">{{ course.lessons_count }} aulas</span>
+          </div>
+
+          <div class="card-footer">
+            <div class="price">{{ formatPrice(course.price) }}</div>
+            <button @click="openCourse(course)" class="btn-enroll">Ver Curso</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <WelcomeModal
+      v-if="selectedCourse" 
+      :course="selectedCourse" 
+      @close="selectedCourse = null"
+
+    />
+  </div>
+</template>
   
-  <style scoped>
+<style scoped>
   .home-container { min-height: 100vh; background-color: #f8fafc; padding-bottom: 4rem; }
   
   /* Hero Section */
@@ -207,4 +304,4 @@
   /* Loader */
   .loader-container { text-align: center; padding: 4rem; color: #7e22ce; }
   .no-results { grid-column: 1 / -1; text-align: center; padding: 3rem; color: #64748b; }
-  </style>
+</style>
