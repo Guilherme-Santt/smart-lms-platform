@@ -1,5 +1,34 @@
-# Vue 3 + Vite
+🚀 Projeto Vue 3 
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+🛠️ Pré-requisitos
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+Antes de começar, certifique-se de ter instalado em sua máquina:
+
+    Node.js: Versão ^22.0.0
+
+    Gerenciador de pacotes: npm (vem com o Node), yarn ou pnpm.
+
+    Dica: Recomendamos o uso do nvm para gerenciar versões do Node. Para mudar para a versão correta, basta rodar:
+    Bash
+
+    nvm install 22
+    nvm use 22
+
+🏗️ Configuração do Projeto
+
+Siga os passos abaixo para rodar o projeto localmente:
+1. Clonar o repositório
+Bash
+
+git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/Guilherme-Santt/smart-lms-platform)
+cd seu-repositorio
+
+2. Instalar as dependências
+Bash
+
+npm install
+
+3. Scripts Disponíveis
+
+No diretório do projeto, você pode executar os seguintes comandos:
+  npm run dev
